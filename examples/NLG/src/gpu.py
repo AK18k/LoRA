@@ -18,10 +18,10 @@ import torch.distributed as dist
 
 def add_gpu_params(parser: argparse.ArgumentParser):
     parser.add_argument("--platform", default='k8s', type=str, help='platform cloud')
-    parser.add_argument("--local_rank", default=0, type=int, help='local rank')
-    parser.add_argument("--rank", default=0, type=int, help='rank')
-    parser.add_argument("--device", default=0, type=int, help='device')
-    parser.add_argument("--world_size", default=0, type=int, help='world size')
+    parser.add_argument("--local_rank", default=0, type=int, help='local rank') # not used
+    parser.add_argument("--rank", default=0, type=int, help='rank') # not used
+    parser.add_argument("--device", default=0, type=int, help='device') # not used
+    parser.add_argument("--world_size", default=0, type=int, help='world size') # not used
     parser.add_argument("--random_seed", default=10, type=int, help='random seed')
 
 
@@ -56,14 +56,11 @@ def parse_gpu(args):
     torch.manual_seed(args.random_seed)
     
     if args.platform == 'local':
-        dist.init_process_group(backend='nccl')
-        local_rank = torch.distributed.get_rank()
-        torch.cuda.set_device(local_rank)
-        device = torch.device('cuda', local_rank)
-        args.rank = local_rank
+        device = torch.device('cuda')
+        args.rank = 0
         args.device = device
-        args.world_size = torch.distributed.get_world_size()
-        args.dist = dist
+        args.world_size = 1
+        args.dist = None        
         
     elif args.platform == 'azure':
         import horovod.torch as hvd

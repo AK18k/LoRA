@@ -21,22 +21,22 @@ def add_optimizer_params(parser: argparse.ArgumentParser):
     parser.add_argument('--weight_decay', default=0.01, type=float, help='weight decay rate')
     parser.add_argument('--correct_bias', action='store_true', help='correct adam bias term')
     parser.add_argument('--adam_epislon', default=1e-6, type=float, help='adam epsilon')
-    parser.add_argument('--no_decay_bias', action='store_true', help='no weight decay on bias weigh')
-    parser.add_argument('--adam_beta1', default=0.9, type=float, help='adam beta1 term')
+    parser.add_argument('--no_decay_bias', action='store_true', help='no weight decay on bias weigh') # not used
+    parser.add_argument('--adam_beta1', default=0.9, type=float, help='adam beta1 term') # not used
     parser.add_argument('--adam_beta2', default=0.98, type=float, help='adam beta2 term')
     
     parser.add_argument('--scheduler', default='linear', type=str,
                         choices=['cosine', 'inv_sqrt', 'dev_perf', 'constant', 'linear', 'cycle'],
                         help='lr scheduler to use.')
 
-    parser.add_argument('--max_step', type=int, default=None, help='upper epoch limit')
+    parser.add_argument('--max_step', type=int, default=None, help='upper epoch limit') # not used
 
     parser.add_argument('--max_epoch', type=int, default=None, help='max epoch of training')
 
     parser.add_argument('--warmup_step', type=int, default=0, help='upper epoch limit')
 
-    parser.add_argument('--i_steps', type=str, default='0', help='interval_steps')
-    parser.add_argument('--i_lrs', type=str, default='0.00025', help='interval_lrs')
+    parser.add_argument('--i_steps', type=str, default='0', help='interval_steps') # not used
+    parser.add_argument('--i_lrs', type=str, default='0.00025', help='interval_lrs') # not used
 
 
 class AdamW(Optimizer):

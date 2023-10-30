@@ -8,6 +8,7 @@ import math
 import os, sys
 import numpy as np
 import itertools
+import warnings
 
 import torch
 import random
@@ -59,11 +60,11 @@ parser.add_argument('--model_card', default='gpt2.md', choices=['gpt2.sm', 'gpt2
 
 parser.add_argument('--init_checkpoint', default=None, help='pretrained checkpoint path')
 
-parser.add_argument('--fp16', action='store_true', help='train model with fp16')
+parser.add_argument('--fp16', action='store_true', help='train model with fp16') # not used
 
-parser.add_argument('--log_interval', type=int, default=100, help='log interval')
+parser.add_argument('--log_interval', type=int, default=100, help='log interval') # not used
 
-parser.add_argument('--eval_interval', type=int, default=2000, help='eval interval')
+parser.add_argument('--eval_interval', type=int, default=2000, help='eval interval') # not used
 
 parser.add_argument('--save_interval', type=int, default=500, help='save interval')
 
@@ -75,20 +76,20 @@ parser.add_argument('--lora_dim', type=int, default=0, help='lora attn dimension
 parser.add_argument('--lora_alpha', type=int, default=128, help='lora attn alpha')
 
 parser.add_argument('--obj', default='clm', choices=['jlm', 'clm'], 
-                    help='language model training objective')
+                    help='language model training objective') # not used
 
 parser.add_argument('--lora_dropout', default=0.0, type=float, 
                     help='dropout probability for lora layers')
 
 parser.add_argument('--label_smooth', default=0.0, type=float, help='label smoothing')
 
-parser.add_argument('--roll_interval', type=int, default=-1, help='rolling interval')
+parser.add_argument('--roll_interval', type=int, default=-1, help='rolling interval') # not used
 
-parser.add_argument('--roll_lr', type=float, default=0.00001, help='rolling learning rate')
+parser.add_argument('--roll_lr', type=float, default=0.00001, help='rolling learning rate') # not used
 
-parser.add_argument('--roll_step', type=int, default=100, help='rolling step')
+parser.add_argument('--roll_step', type=int, default=100, help='rolling step') # not used
 
-parser.add_argument('--eval_epoch', type=int, default=1, help='eval per number of epochs')
+parser.add_argument('--eval_epoch', type=int, default=1, help='eval per number of epochs') # not used
 
 # influence model, calculate the influence score between two samples.
 def print_args(args):
@@ -183,8 +184,6 @@ def train_validate(
     print('start to train the model................', epoch)
     log_start_time = time.time()
     best_val_ppl = None
-
-    train_loader.sampler.set_epoch(epoch)
 
     for idx, data in enumerate(train_loader):
         data = {key: value for key, value in data.items()}
@@ -286,15 +285,11 @@ if __name__ == '__main__':
 
     train_loader = DataLoader(
         train_data, batch_size=args.train_batch_size, num_workers=0, 
-        shuffle=False, pin_memory=False, drop_last=True,
-        sampler=torch.utils.data.distributed.DistributedSampler(train_data, seed=args.random_seed)
-    )
+        shuffle=True, pin_memory=True, drop_last=True)
     
     valid_loader = DataLoader(
         valid_data, batch_size=args.valid_batch_size, num_workers=0, 
-        shuffle=False, pin_memory=False, drop_last=False,
-        sampler=torch.utils.data.distributed.DistributedSampler(valid_data, seed=args.random_seed)
-    )
+        shuffle=False, pin_memory=True, drop_last=False)
 
     if args.model_card == 'gpt2.sm':
         config = GPT2Config(
@@ -336,7 +331,6 @@ if __name__ == '__main__':
     scheduler = create_optimizer_scheduler(optimizer, args)
     if args.fp16:
         lm_net, optimizer = amp.initialize(lm_net, optimizer, opt_level="O1")
-    lm_net, optimizer = distributed_opt(args, lm_net, optimizer, grad_acc=args.grad_acc)
 
     try:
         train_step = 0
