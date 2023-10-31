@@ -48,7 +48,7 @@ def distributed_gather(args, tensor):
 def distributed_sync(args):
     if args.platform == 'azure':
         args.hvd.allreduce(torch.tensor(0), name='barrier')
-    else:
+    elif args.dist is not None:
         args.dist.barrier()
 
 
