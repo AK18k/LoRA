@@ -258,6 +258,9 @@ def train_validate(
 
 
 if __name__ == '__main__':
+    # ask for press key before continue execution
+    input('Press enter to continue training: ')
+
     args = parser.parse_args()
     parse_gpu(args)
     print_args(args)

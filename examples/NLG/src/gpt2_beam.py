@@ -317,10 +317,11 @@ def beam(model, data_iter, args):
 
 
             with torch.no_grad():
-                _id = distributed_gather(args, _id)
-                output = distributed_gather(args, best_sequence)
+                # _id = distributed_gather(args, _id)
+                # output = distributed_gather(args, best_sequence)
+                output = best_sequence
                 #score = distributed_gather(args, score)
-                distributed_sync(args)
+                #distributed_sync(args)
 
             if args.rank == 0:
                 _id = _id.view(-1).cpu()
@@ -355,13 +356,12 @@ if __name__ == '__main__':
 
     valid_data = FT_Dataset(
         args.data, args.batch_size, args.seq_len, args.eval_len, 
-    )    
-    valid_sampler = torch.utils.data.distributed.DistributedSampler(valid_data)
-    valid_loader = DataLoader(
-        valid_data, batch_size=args.batch_size, num_workers=0, shuffle=False, 
-        pin_memory=False, drop_last=False, sampler=valid_sampler
-    )
+    )   
 
+    valid_loader = DataLoader(
+        valid_data, batch_size=args.batch_size, num_workers=0,
+        shuffle=False, pin_memory=True, drop_last=False)
+    
     if args.model_card == 'gpt2.sm':
         config = GPT2Config(
             n_embd=768, n_layer=12, n_head=12, 
