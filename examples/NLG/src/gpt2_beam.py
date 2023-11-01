@@ -347,6 +347,10 @@ def beam(model, data_iter, args):
     
 
 if __name__ == '__main__':
+    print('got2_beam start , press any key to continue ...')
+    # press any key to continue ...
+    input()
+
     args = parser.parse_args()
     parse_gpu(args)
     print_args(args)

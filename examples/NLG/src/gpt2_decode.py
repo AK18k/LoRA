@@ -63,6 +63,10 @@ def post_process(sent, is_tokenize, is_lower):
 
 
 if __name__ == "__main__":
+    print('got2_decode start , press any key to continue ...')
+    # press any key to continue ...
+    input()
+    
     enc = encoder.get_encoder(args.vocab)
 
     ref_unique = None
