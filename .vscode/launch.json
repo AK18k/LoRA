@@ -54,7 +54,7 @@
                 "--seq_len", "512",
                 "--eval_len", "64",
                 "--model_card", "gpt2.md",
-                "--init_checkpoint", "/home/avi/git_repos/LoRA/trained_models/GPT2_M/e2e/model.26290.pt",
+                "--init_checkpoint", "/home/avi/git_repos/LoRA/trained_models/GPT2_M/e2e/model.52580.pt",
                 "--platform", "local",
                 "--lora_dim", "4",
                 "--lora_alpha", "32",
