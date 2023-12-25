@@ -17,6 +17,10 @@ from torch.optim import Optimizer
 from torch.optim.lr_scheduler import LambdaLR
 from torch.nn.parameter import Parameter
 
+import sys
+import os
+sys.path.append(os.path.abspath("/home/avi/git_repos/LoRA"))
+
 import loralib as lora
 
 

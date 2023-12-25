@@ -15,7 +15,6 @@
             "args": [
                 "--train_data", "/home/avi/git_repos/LoRA/examples/NLG/data/e2e/train.jsonl",
                 "--valid_data", "/home/avi/git_repos/LoRA/examples/NLG/data/e2e/valid.jsonl",
-//                "--test_data", "./data/e2e/test.jsonl",
                 "--train_batch_size", "4",
                 "--grad_acc", "1",
                 "--valid_batch_size", "4",
@@ -30,7 +29,9 @@
                 "--adam_beta2", "0.999",
                 "--scheduler", "linear",
                 "--warmup_step", "500",
-                "--max_epoch", "5",
+                "--max_step", "20000", //added
+                "--max_epoch", "5", // original
+                //"--max_epoch", "2",
                 "--save_interval", "1000",
                 "--lora_dim", "4",
                 "--lora_alpha", "32",
@@ -41,7 +42,7 @@
             ]
         },
         {
-            "name": "Python: test e2e, src/gpt2_beam.py",
+            "name": "Generate outputs from the trained model using beam search",
             "type": "python",
             "request": "launch",
             "program": "./src/gpt2_beam.py",
@@ -54,7 +55,7 @@
                 "--seq_len", "512",
                 "--eval_len", "64",
                 "--model_card", "gpt2.md",
-                "--init_checkpoint", "/home/avi/git_repos/LoRA/trained_models/GPT2_M/e2e/model.52580.pt",
+                "--init_checkpoint", "/home/avi/git_repos/LoRA/trained_models/GPT2_M/e2e/gpt2_md_lora_e2e.pt",
                 "--platform", "local",
                 "--lora_dim", "4",
                 "--lora_alpha", "32",
